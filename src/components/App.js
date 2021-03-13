@@ -1,12 +1,28 @@
 import React, {Component} from 'react';
 
 import {View, Text, StyleSheet} from 'react-native';
+import ajax from '../ajax';
+import DealList from './DealList';
 
 class App extends Component {
+  state = {
+    deals: [],
+  };
+  async componentDidMount() {
+    const deals = await ajax.fetchInitialDeals();
+    this.setState((state, props) => {
+      return {deals};
+    });
+  }
+
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.header}>Bakesale</Text>
+        {this.state.deals.length > 0 ? (
+          <DealList deals={this.state.deals} />
+        ) : (
+          <Text style={styles.header}>Bakesale</Text>
+        )}
       </View>
     );
   }
